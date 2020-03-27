@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { port } = require('./config');
 const { uuidv4 } = require('./util');
-const { save, getAll, getByUserId } = require('./repository');
+const { save, getAll, remove, getByUserId } = require('./repository');
 
 const app = express();
 
@@ -28,6 +28,12 @@ router.post('/login', (req, res) => {
   save(userId, { ...userData, token });
 
   res.status(200).send(token);
+});
+
+router.delete('/login', (req, res) => {
+  const token = req.headers['x-api-token'];
+  remove(token);
+  res.status(204).send();
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));

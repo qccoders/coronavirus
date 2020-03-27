@@ -1,6 +1,4 @@
-const users = {
-    "test": { "someProp": 1 }
-};
+const users = {};
 
 const init = () => {
 
@@ -12,6 +10,15 @@ const save = (userId, data) => {
     users[userId] = data;
 
     console.log('save', userId, data);
+};
+
+const remove = (token) => {
+    for (const user of Object.keys(users)) {
+        if (users[user].token === token) {
+            users[user].token = null;
+            console.log("Deleted token for user " + user);
+        }
+    }
 }
 
 const getByUserId = (userId) => users[userId];
@@ -19,6 +26,7 @@ const getByUserId = (userId) => users[userId];
 module.exports = {
     init,
     save,
+    remove,
     getAll,
     getByUserId
 }
