@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
 import axios from 'axios';
 import { baseUrl } from '../config';
+import { TOKEN_KEY } from '../constants';
 
 const initialState = {
   email: ''
@@ -18,8 +19,9 @@ class Login extends Component {
     axios.post(`${baseUrl}/login`, { id: this.state.email })
       .then(response => response.data)
       .then(token => {
-        localStorage.setItem('coronavirus-token', token)
+        localStorage.setItem(TOKEN_KEY, token)
         console.log('logged in', token);
+        this.props.onLogin(token);
       });
   }
 
