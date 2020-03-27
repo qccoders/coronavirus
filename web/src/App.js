@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { TOKEN_KEY } from './constants';
-
+import { baseUrl } from './config';
+import axios from 'axios';
 import Greeting from './Greeting';
 import Login from './Login';
 import Dashboard from './Dashboard';
@@ -20,7 +21,14 @@ class App extends Component {
   }
 
   logout = () => {
-    this.setState({ ...initialState }, () => localStorage.removeItem(TOKEN_KEY));
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    axios.delete(`${baseUrl}/login`, {
+      headers: {
+        'X-API-TOKEN': token
+      }
+    })
+    .then(_ => this.setState({ ...initialState }, () => localStorage.removeItem(TOKEN_KEY)))
   }
 
   componentWillMount = () => {
