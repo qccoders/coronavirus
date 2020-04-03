@@ -19,16 +19,30 @@ router.get('/greeting', (req, res) => {
     .send('Hello, World!');
 });
 
-router.post('/login', (req, res) => {
-  const userId = req.body.id;
-  const token = uuidv4();
+//generate code
+//attach to user
 
+router.post('/code', (req, res) => {
+  const data = uuidv4();
+  const userId = req.body.id;
+  const codeSaved = saveUserData(userId, {code: data});
+
+  res.status(200).send(codeSaved);
+});
+
+router.post('/login', (req, res) => {
+  const data = uuidv4();
+  const userId = req.body.id;
+  const tokenSaved = saveUserData(userId, {token: data});
+
+  res.status(200).send(tokenSaved);
+});
+
+saveUserData = (userId, data) => {  
   const userData = getByUserId(userId) || {};
 
-  save(userId, { ...userData, token });
-
-  res.status(200).send(token);
-});
+  return save(userId, { ...userData, ...data });
+}
 
 router.delete('/login', (req, res) => {
   const token = req.headers['x-api-token'];

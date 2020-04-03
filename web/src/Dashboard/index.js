@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import {
   Button
 } from 'semantic-ui-react';
-
+import axios from 'axios';
+import {baseUrl} from '../config';
+import {TOKEN_KEY} from '../constants'
 import Approval from '../Approval';
 
 const initialState = {
@@ -22,21 +24,25 @@ class Dashboard extends Component {
   state = initialState;
 
   getCode = () => {
-    return 1
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    return axios.post(`${baseUrl}/code`, {id: token})
+      .then(res => res.data.code)
   }
 
   handleYes = () => {
     const { step } = this.state;
 
     if (step === steps.length - 1) {
-      this.setState({ approved: true, code: this.getCode() }, () => {
-
-      });
-    } else {
+      this.getCode().then((code) => {
+        this.setState({ approved: true, code })
+      })
+    } 
+    else {
       this.setState({ step: step + 1 });
     }
   }
-
+      
   handleNo = () => {
     this.setState({ rejected: true });
   }

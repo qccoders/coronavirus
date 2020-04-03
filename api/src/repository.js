@@ -10,6 +10,8 @@ const save = (userId, data) => {
     users[userId] = data;
 
     console.log('save', userId, data);
+
+    return data;
 };
 
 const remove = (token) => {
@@ -22,6 +24,7 @@ const remove = (token) => {
 }
 
 const getByUserId = (userId) => users[userId];
+const getByToken = (token) => 
 
 module.exports = {
     init,
