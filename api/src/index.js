@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { port } = require('./config');
 const { uuidv4 } = require('./util');
-const { save, getAll, remove, getByUserId } = require('./repository');
+const { save, getAll, remove, getByUserId, getByToken } = require('./repository');
 
 const app = express();
 
@@ -24,7 +24,10 @@ router.get('/greeting', (req, res) => {
 
 router.post('/code', (req, res) => {
   const data = uuidv4();
-  const userId = req.body.id;
+  const token = req.body.token;
+
+  const userId = getByToken(token);
+  console.log(userId);
   const codeSaved = saveUserData(userId, {code: data});
 
   res.status(200).send(codeSaved);
@@ -38,7 +41,7 @@ router.post('/login', (req, res) => {
   res.status(200).send(tokenSaved);
 });
 
-saveUserData = (userId, data) => {  
+saveUserData = (userId, data) => {
   const userData = getByUserId(userId) || {};
 
   return save(userId, { ...userData, ...data });

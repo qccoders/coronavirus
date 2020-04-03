@@ -21,11 +21,11 @@ class App extends Component {
   }
 
   logout = () => {
-    const token = localStorage.getItem(TOKEN_KEY);
+    const auth = JSON.parse(localStorage.getItem(TOKEN_KEY));
 
     axios.delete(`${baseUrl}/login`, {
       headers: {
-        'X-API-TOKEN': token
+        'X-API-TOKEN': auth.token
       }
     })
     .then(_ => this.setState({ ...initialState }, () => localStorage.removeItem(TOKEN_KEY)))

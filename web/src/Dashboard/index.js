@@ -24,9 +24,9 @@ class Dashboard extends Component {
   state = initialState;
 
   getCode = () => {
-    const token = localStorage.getItem(TOKEN_KEY);
+    const auth = JSON.parse(localStorage.getItem(TOKEN_KEY));
 
-    return axios.post(`${baseUrl}/code`, {id: token})
+    return axios.post(`${baseUrl}/code`, auth)
       .then(res => res.data.code)
   }
 
@@ -37,12 +37,12 @@ class Dashboard extends Component {
       this.getCode().then((code) => {
         this.setState({ approved: true, code })
       })
-    } 
+    }
     else {
       this.setState({ step: step + 1 });
     }
   }
-      
+
   handleNo = () => {
     this.setState({ rejected: true });
   }
